@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:SimpleChat.Converters"
+             x:Name="ThisPage"
+             x:Class="SimpleChat.ChatPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:MarginConverter x:Key="marginConverter"/>
+            <converters:ColorConverter x:Key="colorConverter"/>
+            <converters:TextConverter x:Key="textConverter"/>
+            <converters:ImageConverter x:Key="imageConverter"/>
+            <converters:AudioConverter x:Key="audioConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding User.Name}" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="EndAndExpand">
+            <ListView
+                x:Name="listView"
+                BackgroundColor="LightSteelBlue"
+                ItemsSource="{Binding Messages}"
+                HasUnevenRows="True"
+                SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame
+                                Margin="{Binding Received, Converter={StaticResource marginConverter}}"
+                                Padding="10"
+                                CornerRadius="10"
+                                BackgroundColor="{Binding Received, Converter={StaticResource colorConverter}}">
+                                <StackLayout>
+                                    <Label Text="{Binding Message}" 
+                                           IsVisible="{Binding ChatType, Converter={StaticResource textConverter}}" />
+                                    <Image Source="{Binding FileImageSource}"
+                                           IsVisible="{Binding ChatType, Converter={StaticResource imageConverter}}"/>
+                                    <StackLayout 
+                                        Orientation="Horizontal"
+                                        IsVisible="{Binding ChatType, Converter={StaticResource audioConverter}}">
+                                        <ImageButton
+                                            Source="play_button.png"
+                                            WidthRequest="25" HeightRequest="25"
+                                            BackgroundColor="Transparent"
+                                            Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.PlayOrStopAudioCommand}" 
+                                            CommandParameter="{Binding .}"
+                                            Margin="0, 0, 5, 0"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackLayout Orientation="Horizontal" Margin="15, 0, 15, 20">
+                <ImageButton 
+                    Source="image_files.png"
+                    WidthRequest="25" HeightRequest="25"
+                    BackgroundColor="Transparent"
+                    Command="{Binding OpenGalleryCommand}"/>
+                <Editor
+                    x:Name="editor"
+                    Text="{Binding EnteredText, Mode=TwoWay}"
+                    HorizontalOptions="FillAndExpand"
+                    Focused="OnSetFocus"
+                    HeightRequest="60"
+                    Margin="0" />
+                <Label
+                    x:Name="recordTime"
+                    Text="00:00"
+                    VerticalOptions="CenterAndExpand"
+                    IsVisible="false"
+                    Margin="0, 0, 5, 0" />
+                <ImageButton
+                    Source="play_button.png"
+                    WidthRequest="25" HeightRequest="25"
+                    BackgroundColor="Transparent"
+                    Margin="0, 0, 5, 0"
+                    Clicked="OnRecorderClicked"/>
+                <ImageButton 
+                    Source="send_message.png"
+                    WidthRequest="25" HeightRequest="25"
+                    BackgroundColor="Transparent"
+                    Command="{Binding SendCommand}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

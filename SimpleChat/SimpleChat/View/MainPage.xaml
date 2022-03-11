@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="ThisPage"
+             x:Class="SimpleChat.MainPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add User" Command="{Binding AddItemCommand}"/>
+    </ContentPage.ToolbarItems>
+    <StackLayout>
+        <ListView ItemsSource="{Binding Users}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Name}"
+                              Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.NavigateToChatPageCommand}" 
+                              CommandParameter="{Binding .}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
